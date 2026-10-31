@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 
 // MARK: - Internal Core
 
@@ -66,6 +67,25 @@ public struct PreparedTextWithSegments: @unchecked Sendable {
 
     /// The text of each segment, in order.
     public let segments: [String]
+
+    /// The break kind of each segment.
+    public var kinds: [SegmentBreakKind] { core.kinds }
+
+    /// The measured width of each segment.
+    public var widths: [Float] { core.widths }
+}
+
+/// Prepared rich text whose attributes remain attached to every measured
+/// segment. The paragraph is analyzed as one string, so a font, color, or link
+/// boundary never creates an extra wrapping opportunity.
+public struct PreparedRichText: @unchecked Sendable {
+    let core: PreparedCore
+
+    /// Attributed text for each measured segment, in source order.
+    public let attributedSegments: [NSAttributedString]
+
+    /// The plain text for each segment.
+    public var segments: [String] { attributedSegments.map(\.string) }
 
     /// The break kind of each segment.
     public var kinds: [SegmentBreakKind] { core.kinds }
